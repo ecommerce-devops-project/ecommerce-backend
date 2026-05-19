@@ -3,8 +3,7 @@ name: Backend CI
 on:
   push:
     branches:
-      - main
-      - ci-cd-implementation
+      - '**'
 
 jobs:
   backend-build:
