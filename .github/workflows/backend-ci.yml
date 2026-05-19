@@ -27,5 +27,14 @@ jobs:
         working-directory: ecommerce-backend-node
 
       - name: Build Docker Image
-        run: docker build -t ecommerce-backend .
+        run: docker build -t rahulpallavi/ecommerce-backend:latest .
         working-directory: ecommerce-backend-node
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push Docker Image
+        run: docker push rahulpallavi/ecommerce-backend:latest
