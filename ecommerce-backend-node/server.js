@@ -2,10 +2,11 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-  let products = [
+let products = [
   {
     id: 1,
     name: 'Laptop',
@@ -26,26 +27,30 @@ app.use(express.json());
   }
 ];
 
-
 app.get('/', (req, res) => {
   res.send('Backend is running 🚀');
 });
 
-app.post('/api/products',(req,res) => {
+app.post('/api/products', (req, res) => {
   const newProduct = req.body;
 
   newProduct.id = products.length + 1;
-  // ✅ fallback image
-  newProduct.image = newProduct.image || 'https://via.placeholder.com/300';
+
+  // fallback image
+  newProduct.image =
+    newProduct.image || 'https://via.placeholder.com/300';
+
   products.push(newProduct);
 
   res.status(201).json(newProduct);
-})
+});
 
 app.get('/api/products', (req, res) => {
   res.json(products);
 });
 
-app.listen(3000, () => {
-  console.log('Server running on http://localhost:3000');
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
