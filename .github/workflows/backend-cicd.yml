@@ -1,4 +1,4 @@
-name: Backend CI
+name: Backend CI-CD
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   backend-build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout Code
@@ -38,3 +38,9 @@ jobs:
 
       - name: Push Docker Image
         run: docker push rahulpallavi/ecommerce-backend:latest
+
+      - name: Deploy to Kubernetes
+        run: |
+          cd ~/projects/ecommerce-k8s-manifests/ecommerce-chart
+          helm upgrade ecommerce . -n ecommerce
+          kubectl rollout restart deployment ecommerce-backend -n ecommerce
