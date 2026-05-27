@@ -27,7 +27,7 @@ jobs:
         working-directory: ecommerce-backend-node
 
       - name: Build Docker Image
-        run: docker build -t rahulpallavi/ecommerce-backend:latest .
+        run: docker build -t rahulpallavi/ecommerce-backend:${{ github.run_number }} .
         working-directory: ecommerce-backend-node
 
       - name: Login to Docker Hub
@@ -37,10 +37,14 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Push Docker Image
-        run: docker push rahulpallavi/ecommerce-backend:latest
+        run: docker push rahulpallavi/ecommerce-backend:${{ github.run_number }}
 
       - name: Deploy to Kubernetes
         run: |
           cd ~/projects/ecommerce-k8s-manifests/ecommerce-chart
-          helm upgrade ecommerce . -n ecommerce
-          kubectl rollout restart deployment ecommerce-backend -n ecommerce
+
+          helm upgrade ecommerce . \
+            -n ecommerce \
+            --set backend.image.tag=${{ github.run_number }}
+
+          kubectl rollout status deployment/ecommerce-backend -n ecommerce
