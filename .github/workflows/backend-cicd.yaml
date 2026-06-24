@@ -43,7 +43,7 @@ jobs:
         run: |
           cd ~/projects/ecommerce-k8s-manifests/ecommerce-chart
 
-          helm upgrade ecommerce . \
+            helm upgrade --install ecommerce . \
             -n ecommerce \
             --set backend.image.tag=${{ github.run_number }}
 
