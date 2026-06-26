@@ -43,8 +43,10 @@ jobs:
         run: |
           cd ~/projects/ecommerce-k8s-manifests/ecommerce-chart
 
-          helm upgrade ecommerce . \
+            helm upgrade --install ecommerce . \
             -n ecommerce \
+            --create-namespace \
             --set backend.image.tag=${{ github.run_number }}
 
           kubectl rollout status deployment/ecommerce-backend -n ecommerce
+          
